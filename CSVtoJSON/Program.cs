@@ -30,8 +30,9 @@ namespace NEAScripts
             double moneySpent = 0;
             foreach (TransactionData data in transactions)
             {
-                if (categoriser.CheckGeneralCategory(data, "Transport"))
+                if (categoriser.CategoryBasedOnSimilarityWeighting(data, "Food"))
                 {
+                    Console.WriteLine(data.Details);
                     moneySpent += data.MoneyOut;
                     categoryCount++;
                 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -15,8 +16,32 @@ namespace NEAScripts
 
         }
 
-        public bool CheckGeneralCategory(TransactionData transactionData, string whatCategory)
+
+        public bool CategoryBasedOnSimilarityWeighting(TransactionData data, string whatCategory)
         {
+            double foodCategoryWeighting;
+            double transportCategoryWeighting;
+            bool isCategory = false;
+            switch (whatCategory)
+            {
+                case "Food":
+                    foodCategoryWeighting = CheckGeneralCategory(data, whatCategory);
+                    transportCategoryWeighting = CheckGeneralCategory(data, "Transport");
+                    isCategory = foodCategoryWeighting > transportCategoryWeighting ? true : false;
+                    break;
+                case "Transport":
+                    foodCategoryWeighting = CheckGeneralCategory(data, "Food");
+                    transportCategoryWeighting = CheckGeneralCategory(data, whatCategory);
+                    isCategory = transportCategoryWeighting > foodCategoryWeighting ? true : false;
+                    break;
+            }
+            return isCategory;
+
+        }
+
+        public double CheckGeneralCategory(TransactionData transactionData, string whatCategory) //make this into returning similarity rating
+        {
+            double threshold = 0.7;
             List<string> details = transactionData.Details.Split(" ").ToList();
             var foodShops = GetDictionariesForCategories(whatCategory);
             foreach(var category in foodShops)
@@ -31,20 +56,19 @@ namespace NEAScripts
                         {
                             for (int j = 0; j < details.Count; j++)
                             {
-                                if (LevenshteinDistance(details[j].ToUpper(), list[i].ToUpper()))
+                                if ((LevenshteinDistance(details[j].ToUpper(), list[i].ToUpper()) > threshold))
                                 {
-                                    Console.WriteLine(transactionData.Details);
-                                    return true;
+                                    return (LevenshteinDistance(details[j].ToUpper(), list[i].ToUpper()));
                                 }
                             }
                         }
                     }
                 }
             }
-            return false;
+            return 0;
         }
 
-        public bool LevenshteinDistance(string transactionDetails, string wordFromDictionary) //Method to find the minimum edit distance between two strings 
+        public double LevenshteinDistance(string transactionDetails, string wordFromDictionary) //Method to find the minimum edit distance between two strings 
         {
             int[,] matrix = new int[transactionDetails.Length + 1, wordFromDictionary.Length + 1]; //create a matrix with empty character at 0,0
                                                                                                    //then transactionDetails on the x axis and wordFromDictionary on the Y
@@ -77,9 +101,9 @@ namespace NEAScripts
             double maxLenghtOfStrings = Math.Max(transactionDetails.Length, wordFromDictionary.Length);
             double similarityOfStrings = 1.0 - (matrix[transactionDetails.Length, wordFromDictionary.Length] / maxLenghtOfStrings);
 
-            double thresholdForSimilarityOfStrings = 0.7;
+            //double thresholdForSimilarityOfStrings = 0.7;
 
-            return similarityOfStrings >= thresholdForSimilarityOfStrings; //returns max index of the matrix which represents the minimum edit distance
+            return similarityOfStrings; //returns max index of the matrix which represents the minimum edit distance
 
         }
 

@@ -108,7 +108,7 @@ namespace NEAScripts
                     "food critic", "food trends", "comfort food", "street food",
                     "food truck", "food festival", "culinary", "gastronomy",
                     "meal prep", "grains", "spices", "herbs", "seasonings",
-                    "flavors", "taste","tortilla", "drinks"
+                    "flavours", "taste","tortilla", "drinks", "College","Sixth Form"
                 }
             }
         };
@@ -118,9 +118,9 @@ namespace NEAScripts
             {"Transport", new List<string>
                 {
                    "Transport for London (TfL)", "National Rail", "London Underground", "London Overground", "Docklands Light Railway (DLR)", "Tramlink", "Merseyrail", "Glasgow Subway", "Edinburgh Trams", "Northern Ireland Railways",
-                    "Uber", "Lyft", "Bolt", "Ola",
+                    "Uber", "Lyft", "Bolt", "Ola", "Taxi", "Panther",
                     "Black Cabs", "Addison Lee", "Green Cabs", "UberTaxi",
-                    "Hertz", "Enterprise", "Avis", "Budget", "Sixt", "Europcar", "Thrifty Car Rental",
+                    "Hertz", "Enterprise", "Avis", "Budget", "Europcar", "Thrifty Car Rental",
                     "Royal Mail", "ParcelForce", "DPD", "Hermes", "Yodel", "UPS", "FedEx", "DHL",
                     "CitySprint", "Courier Expert", "eCourier", "Gophr",
                     "Maersk Line", "Mediterranean Shipping Company (MSC)", "CMA CGM Group", "P&O Ferries", "Stena Line", "Brittany Ferries",
