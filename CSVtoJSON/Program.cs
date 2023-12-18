@@ -16,23 +16,31 @@ namespace NEAScripts
         {
 
             TransactionStack reader = new TransactionStack("Transactions.csv");
-            //SQLConnection connection = new SQLConnection();
 
             Stack<TransactionData> transactions = reader.GetTransactionDataStack();
-            //TransactionData transaction = transactions.Pop();
-
+            
             SQLCommands<TransactionData> commands = new SQLCommands<TransactionData>(1);
-            //commands.PopulateTable(transactions);
-            //commands.PrintTransactionData([], null);
-            List<TransactionData> data = commands.GetListOfTableValues([], null);
-            commands.PrintTransactionData(["TransactionID"], null);
 
-            //TransactionData transaction = commands.SelectTableProperties(["Details", "Balance"], "TransactionID = 1");
-            //Console.WriteLine(transaction.Details);
+            //List<TransactionData> data = commands.GetListOfTableValues([], null);
 
-            //SQLCommandBuilder builder = new SQLCommandBuilder(connection,1);
-            //builder.BuildInsertCommand(transaction);
-            //Console.WriteLine(builder.BuildSelectCommand(["Details","Balance"], "TransactionID = 1")[0].Balance); 
+            //commands.PrintTransactionData(["TransactionID"], null);
+
+            TransactionCategoriser categoriser = new TransactionCategoriser();
+            int categoryCount = 0;
+            double moneySpent = 0;
+            foreach (TransactionData data in transactions)
+            {
+                if (categoriser.CheckGeneralCategory(data, "Transport"))
+                {
+                    moneySpent += data.MoneyOut;
+                    categoryCount++;
+                }
+
+                //categoriser.CheckIfFoodCategory(data);
+            }
+            Console.WriteLine(moneySpent);
+            Console.WriteLine(categoryCount);
+
         }
     }
 }
